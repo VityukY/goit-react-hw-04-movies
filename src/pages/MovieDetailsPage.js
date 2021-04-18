@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { Component } from 'react';
-import { Route, NavLink } from 'react-router-dom';
-import Cast from '../components/Cast';
-import ReviewsFilm from '../components/ReviewsFilm';
-
+import MovieDetailsCard from '../components/MovieDetailsCard';
+import apis from '../service/apiMovies';
+import AdditionalMovieInformation from '../components/AdditionalInformation';
 class MovieDetailsPage extends Component {
    state = {
       movieId: this.props.match.params.movieId,
@@ -12,101 +10,39 @@ class MovieDetailsPage extends Component {
       overview: null,
       cast: null,
       reviews: null,
-      filmReviews: null,
-      castRevies: false,
-      filmReviewsOpen: false,
    };
+
    componentDidMount() {
-      this.featchMovieDetaild();
-      this.castRequest();
-      this.reviewsRequest();
+      this.featchMovieDetails();
+      this.fetchCast();
+      this.fetchReviews();
    }
-   featchMovieDetaild = () => {
-      axios
-         .get(
-            `https://api.themoviedb.org/3/movie/${this.state.movieId}?api_key=0e0748a6c8b324a098ac6737209de7e8&language=en-US`,
-         )
-         .then(response => this.setState({ ...response.data }));
+
+   featchMovieDetails = () => {
+      apis.MovieDetails(this.state.movieId).then(response => this.setState({ ...response.data }));
    };
 
-   castReviewsToogle = () => {
-      this.setState(prevState => ({
-         castRevies: !prevState.castRevies,
-         filmReviewsOpen: false,
-      }));
-   };
-   revwsReviewsToogle = () => {
-      this.setState(prevState => ({
-         filmReviewsOpen: !prevState.filmReviewsOpen,
-         castRevies: false,
-      }));
+   fetchCast = () => {
+      apis.Cast(this.state.movieId).then(response => this.setState({ cast: response.data.cast }));
    };
 
-   castRequest = () => {
-      axios
-         .get(
-            `https://api.themoviedb.org/3/movie/${this.state.movieId}/credits?api_key=0e0748a6c8b324a098ac6737209de7e8&language=en-US`,
-         )
-         .then(response => this.setState({ cast: response.data.cast }));
-   };
-   reviewsRequest = () => {
-      axios
-         .get(
-            `https://api.themoviedb.org/3/movie/${this.state.movieId}/reviews?api_key=0e0748a6c8b324a098ac6737209de7e8&language=en-US&language=en-US&page=1`,
-         )
-         .then(response =>
-            this.setState({ filmReviews: response.data.results }),
-         );
+   fetchReviews = () => {
+      apis
+         .Reviews(this.state.movieId)
+         .then(response => this.setState({ reviews: response.data.results }));
    };
 
    render() {
-      const { title, overview, poster_path } = this.state;
+      const { title, overview, poster_path, cast, reviews, movieId } = this.state;
       return (
          <>
             {this.state.title && (
                <>
-                  <h1>{title}</h1>
-                  <p>{overview}</p>
-                  <img
-                     src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                     alt={title}
-                  />
-
-                  <NavLink to={`/movies/${this.state.movieId}/cast`}>
-                     <button type="button" onClick={this.castReviewsToogle}>
-                        {this.state.castRevies ? 'Close Cast' : 'Open Cast'}
-                     </button>
-                  </NavLink>
-                  <NavLink to={`/movies/${this.state.movieId}/reviews`}>
-                     <button type="button" onClick={this.revwsReviewsToogle}>
-                        {this.state.filmReviewsOpen
-                           ? 'Close Reviews'
-                           : 'Open Reviews'}
-                     </button>
-                  </NavLink>
-
-                  {this.state.castRevies && (
-                     <Route
-                        path="/movies/:movieId/cast"
-                        render={props => {
-                           return <Cast {...props} cast={this.state.cast} />;
-                        }}
-                     />
-                  )}
-
-                  {this.state.filmReviewsOpen && (
-                     <Route
-                        path="/movies/:movieId/reviews"
-                        render={props => {
-                           return (
-                              <ReviewsFilm
-                                 {...props}
-                                 reviews={this.state.filmReviews}
-                              />
-                           );
-                        }}
-                     />
-                  )}
+                  <button type="button" onClick={this.props.history.goBack}>
+                     go back
+                  </button>
+                  <MovieDetailsCard title={title} overview={overview} poster={poster_path} />
+                  <AdditionalMovieInformation cast={cast} reviews={reviews} id={movieId} />
                </>
             )}
          </>

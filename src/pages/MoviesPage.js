@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import axios from 'axios';
-import FilmCard from '../components/filmCard';
-import { Link } from 'react-router-dom';
+import apis from '../service/apiMovies';
+import SearchForm from '../components/SeacrhForm';
+import Main from '../components/Main';
 
 class MovieView extends Component {
    state = {
@@ -9,62 +9,26 @@ class MovieView extends Component {
       page: 1,
       movies: [],
    };
-   changeHandler = e => {
-      this.setState({ query: e.currentTarget.value });
-   };
 
-   submitHandler = async e => {
-      e.preventDefault();
-      await this.setState({ movies: [], page: 1 });
+   submitFormHandler = async value => {
+      await this.setState({ movies: [], page: 1, query: value });
       this.fetchMovies(this.state.page);
    };
+
    fetchMovies = () => {
-      axios
-         .get(
-            `https://api.themoviedb.org/3/search/movie?api_key=0e0748a6c8b324a098ac6737209de7e8&language=en-US&query=${this.state.query}&page=${this.state.page}&include_adult=false`,
-         )
-         .then(response => {
-            return response.data.results;
-         })
-         .then(data =>
-            this.setState(prevState => ({
-               movies: [...prevState.movies, ...data],
-               page: prevState.page + 1,
-            })),
-         );
+      apis.Movies(this.state.query, this.state.page).then(data =>
+         this.setState(prevState => ({
+            movies: [...prevState.movies, ...data],
+            page: prevState.page + 1,
+         })),
+      );
    };
    render() {
+      const { movies } = this.state;
       return (
          <>
-            <h1> компонент поиска фильмов</h1>
-            <form onSubmit={this.submitHandler}>
-               <input value={this.state.query} onChange={this.changeHandler} />
-               <button type="submit"> Искать фильм </button>
-            </form>
-            {this.state.movies.length > 0 && (
-               <>
-                  <ul className="filmList">
-                     {this.state.movies.map(movie => (
-                        <Link
-                           to={`${this.props.match.url}/${movie.id}`}
-                           className="link"
-                        >
-                           <FilmCard
-                              id={movie.id}
-                              title={movie.title}
-                              backdrop_path={movie.backdrop_path}
-                              overview={movie.overview}
-                           />
-                        </Link>
-                     ))}
-                  </ul>
-                  <div className="btnContaine">
-                     <button type="button" onClick={this.fetchMovies}>
-                        Загрузить еще
-                     </button>
-                  </div>
-               </>
-            )}
+            <SearchForm submitFormHandler={this.submitFormHandler} />
+            {movies.length > 0 && <Main movies={movies} action={this.fetchMovies} />}
          </>
       );
    }
@@ -73,5 +37,6 @@ class MovieView extends Component {
 export default MovieView;
 
 /*'/movies' - компонент <MoviesPage>, страница поиска фильмов по ключевому слову.*/
+/*                  <FilmList movies={this.state.movies} />
 
-/*https://api.themoviedb.org/3/search/movie?api_key=0e0748a6c8b324a098ac6737209de7e8&language=en-US&query=Batman&page=1&include_adult=false*/
+                  <Button action={this.fetchMovies}>Load More</Button>*/
