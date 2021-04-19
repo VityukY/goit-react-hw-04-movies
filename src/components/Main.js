@@ -1,10 +1,10 @@
-import FilmList from './FilmList';
+import MovieList from './MovieList';
 import Button from './Button';
 
 const Main = ({ movies, action }) => {
    return (
       <>
-         <FilmList movies={movies} />
+         <MovieList movies={movies} />
          <Button action={action}>Load More</Button>
       </>
    );

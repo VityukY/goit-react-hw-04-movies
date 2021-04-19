@@ -12,15 +12,11 @@ class Cast extends Component {
             <h1 className="castinTitle">Cast </h1>
             {this.state.actors && (
                <ul className="castList">
-                  {this.state.actors.map(actor => (
+                  {this.state.actors.map(({ cast_id, name, profile_path }) => (
                      <ActorCard
-                        key={actor.cast_id}
-                        name={actor.name}
-                        src={
-                           actor.profile_path
-                              ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-                              : unknowm
-                        }
+                        key={cast_id}
+                        name={name}
+                        src={profile_path ? `https://image.tmdb.org/t/p/w500${profile_path}` : unknowm}
                      />
                   ))}
                </ul>

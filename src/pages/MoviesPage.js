@@ -2,6 +2,8 @@ import { Component } from 'react';
 import apis from '../service/apiMovies';
 import SearchForm from '../components/SeacrhForm';
 import Main from '../components/Main';
+//import routes from '../routes';
+//import { Route } from 'react-router-dom';
 
 class MovieView extends Component {
    state = {
@@ -25,6 +27,7 @@ class MovieView extends Component {
    };
    render() {
       const { movies } = this.state;
+
       return (
          <>
             <SearchForm submitFormHandler={this.submitFormHandler} />
@@ -35,8 +38,16 @@ class MovieView extends Component {
 }
 
 export default MovieView;
+/*            
+           
 
-/*'/movies' - компонент <MoviesPage>, страница поиска фильмов по ключевому слову.*/
-/*                  <FilmList movies={this.state.movies} />
+            {movies.length > 0 && (
+               <Route
+                  path={routes.movieQuery}
+                  render={props => {
+                     return <Main {...props} movies={movies} action={this.fetchMovies} />;
+                  }}
+               />
+            )}
 
-                  <Button action={this.fetchMovies}>Load More</Button>*/
+*/

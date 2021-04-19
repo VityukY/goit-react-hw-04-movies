@@ -2,6 +2,7 @@ import { Component } from 'react';
 import MovieDetailsCard from '../components/MovieDetailsCard';
 import apis from '../service/apiMovies';
 import AdditionalMovieInformation from '../components/AdditionalInformation';
+import Button from '../components/Button';
 class MovieDetailsPage extends Component {
    state = {
       movieId: this.props.match.params.movieId,
@@ -27,9 +28,7 @@ class MovieDetailsPage extends Component {
    };
 
    fetchReviews = () => {
-      apis
-         .Reviews(this.state.movieId)
-         .then(response => this.setState({ reviews: response.data.results }));
+      apis.Reviews(this.state.movieId).then(response => this.setState({ reviews: response.data.results }));
    };
 
    render() {
@@ -38,9 +37,10 @@ class MovieDetailsPage extends Component {
          <>
             {this.state.title && (
                <>
-                  <button type="button" onClick={this.props.history.goBack}>
+                  <Button action={() => this.props.history.push(this.props.location.state.from)}>
                      go back
-                  </button>
+                  </Button>
+
                   <MovieDetailsCard title={title} overview={overview} poster={poster_path} />
                   <AdditionalMovieInformation cast={cast} reviews={reviews} id={movieId} />
                </>
@@ -51,3 +51,4 @@ class MovieDetailsPage extends Component {
 }
 
 export default MovieDetailsPage;
+/*query=Batman*/

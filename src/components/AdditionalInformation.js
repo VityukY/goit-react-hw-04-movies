@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import MovieCasting from './MovieCasting';
-import FilmReviews from './FilmReviews';
+import MovieReviews from './MovieReviews';
+import routes from '../routes';
 
 class AdditionalMovieInformation extends Component {
    state = {
@@ -44,7 +45,7 @@ class AdditionalMovieInformation extends Component {
             <div>
                {castShow && (
                   <Route
-                     path="/movies/:movieId/cast"
+                     path={routes.cast}
                      render={props => {
                         return <MovieCasting {...props} cast={cast} />;
                      }}
@@ -53,9 +54,9 @@ class AdditionalMovieInformation extends Component {
 
                {reviewsShow && (
                   <Route
-                     path="/movies/:movieId/reviews"
+                     path={routes.reviews}
                      render={props => {
-                        return <FilmReviews {...props} reviews={reviews} />;
+                        return <MovieReviews {...props} reviews={reviews} />;
                      }}
                   />
                )}
