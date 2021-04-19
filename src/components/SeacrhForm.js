@@ -21,7 +21,6 @@ class SearchForm extends Component {
       return (
          <>
             <h1> Your choise</h1>
-
             <form onSubmit={this.submitHandler}>
                <input value={this.state.query} onChange={this.changeHandler} />
 
@@ -34,8 +33,7 @@ class SearchForm extends Component {
 
 export default SearchForm;
 /*            
-            
-                        <form onSubmit={this.submitHandler}>
+            <form onSubmit={this.submitHandler}>
                <input value={this.state.query} onChange={this.changeHandler} />
                <NavLink
                   to={{
@@ -43,12 +41,13 @@ export default SearchForm;
                      search: `?query=${this.state.query}`,
                   }}
                >
-                  <button type="button" onClick={this.submitHandler}>
+                  <button type="button" onClick={() =>this.buttonSubmit}>
                      Search
                   </button>
                </NavLink>
             </form>
             
-            
+
+                     
             
             */

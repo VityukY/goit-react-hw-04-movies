@@ -41,7 +41,7 @@ export default MovieView;
 /*            
            
 
-            {movies.length > 0 && (
+{movies.length > 0 && (
                <Route
                   path={routes.movieQuery}
                   render={props => {
@@ -49,5 +49,6 @@ export default MovieView;
                   }}
                />
             )}
+            
 
 */
