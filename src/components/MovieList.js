@@ -1,7 +1,7 @@
 import { Link, withRouter } from 'react-router-dom';
 import MovieCard from './MovieCard';
 
-const MovieList = ({ movies, location }) => {
+const MovieList = ({ movies, location, query }) => {
    return (
       <ul className="movieList">
          {movies.map(({ id, title, backdrop_path }) => (
@@ -11,6 +11,7 @@ const MovieList = ({ movies, location }) => {
                   pathname: `/movies/${id}`,
                   state: {
                      from: location,
+                     query: query,
                   },
                }}
                className="link"
