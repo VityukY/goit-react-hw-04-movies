@@ -35,11 +35,14 @@ class MovieDetailsPage extends Component {
    handleGoBack = () => {
       const { location } = this.state;
       const { history } = this.props;
-
       history.push({
          pathname: location?.state?.from.pathname || routes.home,
-         search: `?query=${location.state?.query || null}`,
       });
+      if (!!location?.state?.query) {
+         history.push({
+            search: `?query=${location.state.query}`,
+         });
+      }
    };
    render() {
       const { title, overview, poster_path, cast, reviews, movieId } = this.state;
@@ -59,3 +62,7 @@ class MovieDetailsPage extends Component {
 }
 
 export default MovieDetailsPage;
+/*   history.push({
+         pathname: location?.state?.from.pathname || routes.home,
+         search: `?query=${location.state?.query || null}`,
+      });*/
